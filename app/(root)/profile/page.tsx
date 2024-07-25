@@ -11,19 +11,19 @@ const ProfileDetails: React.FC = () => {
 	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		if (file) {
-			const reader = new FileReader();
-			reader.onload = (e) => {
-				const img = new Image();
-				img.onload = () => {
-					if (img.width <= 1024 && img.height <= 1024) {
-						setImage(e.target?.result as string);
-					} else {
-						alert("Image must be below 1024x1024px.");
-					}
-				};
-				img.src = e.target?.result as string;
-			};
-			reader.readAsDataURL(file);
+			// const reader = new FileReader();
+			// reader.onload = (e) => {
+			// 	const img = new Image();
+			// 	img.onload = () => {
+			// 		if (img.width <= 1024 && img.height <= 1024) {
+			// 			setImage(e.target?.result as string);
+			// 		} else {
+			// 			alert("Image must be below 1024x1024px.");
+			// 		}
+			// 	};
+			// 	img.src = e.target?.result as string;
+			// };
+			// reader.readAsDataURL(file);
 		}
 	};
 
