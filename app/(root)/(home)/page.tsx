@@ -10,9 +10,7 @@ interface Link {
 }
 
 const Page = () => {
-	const [links, setLinks] = useState<Link[]>([
-		{ id: 1, platform: "GitHub", url: "" },
-	]);
+	const [links, setLinks] = useState<Link[]>([]);
 
 	const addLink = () => {
 		setLinks([...links, { id: links.length + 1, platform: "GitHub", url: "" }]);
@@ -73,7 +71,7 @@ const Page = () => {
 
 					<div className="text-center space-y-5 w-full lg:w-3/4">
 						<h2 className="h1-bold">Let&rsquo;s get you started</h2>
-						<p className="paragraph-medium text-gray-400">
+						<p className="paragraph-medium text-gray-400 sm:text-justify">
 							Use the "Add new link" button to get started. Once you have more
 							than one link, you can reorder and edit them. We are here to help
 							you share your profiles with everyone!
@@ -82,13 +80,12 @@ const Page = () => {
 				</div>
 			)}
 
-			{links.length >= 1 && (
-				<div className="flex items-end justify-end  border-t border-gray-300 pt-5">
-					<button className="bg-primary-main px-6 py-3 h3-bold text-white-main rounded-lg">
-						Save
-					</button>
-				</div>
-			)}
+			<hr />
+			<div className="md:flex md:items-end md:justify-end sm:w-full">
+				<button className="bg-primary-main px-6 py-3 h3-bold text-white-main rounded-lg">
+					Save
+				</button>
+			</div>
 		</section>
 	);
 };

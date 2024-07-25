@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
+import { Provider } from "./Provider";
 import "./globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 	title: "Devlinks",
 	description: "A link sharing app for sharing links to your loved ones!",
 	icons: {
-		icon: "",
+		icon: "/images/logosm.svg",
 	},
 };
 
@@ -21,7 +22,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={instrumentSans.className}>{children}</body>
+			<body className={instrumentSans.className}>
+				<Provider>{children}</Provider>
+			</body>
 		</html>
 	);
 }

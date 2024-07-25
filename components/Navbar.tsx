@@ -15,7 +15,15 @@ const Navbar = () => {
 					alt="logo"
 					width={100}
 					height={100}
-					className="object-cover"
+					className="hidden md:block object-cover"
+				/>
+
+				<Image
+					src={"/images/logosm.svg"}
+					alt="logo"
+					width={50}
+					height={50}
+					className=" md:hidden object-cover"
 				/>
 			</Link>
 

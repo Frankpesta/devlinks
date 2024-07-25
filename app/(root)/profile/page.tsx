@@ -51,7 +51,7 @@ const ProfileDetails: React.FC = () => {
 				<div className="w-3/4 flex flex-col md:flex-row items-start md:items-center gap-3 justify-center">
 					<div className="relative w-[100px] h-[100px]">
 						<Image
-							src={image}
+							src={"/images/profile.svg" || image}
 							alt="Profile picture"
 							layout="fill"
 							objectFit="cover"
