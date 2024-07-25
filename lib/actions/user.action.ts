@@ -4,7 +4,7 @@ import User from "@/database/user.model";
 import bcrypt from "bcryptjs";
 import { CreateUserParams, LoginUserParams } from "./shared.types";
 
-export const register = async (params: CreateUserParams) => {
+export const createAccount = async (params: CreateUserParams) => {
 	const { email, password, confirmPassword } = params;
 
 	try {
@@ -35,9 +35,31 @@ export const register = async (params: CreateUserParams) => {
 
 export const login = async (params: LoginUserParams) => {
 	const { email, password } = params;
+
 	try {
+		await connectToDatabase();
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return {
+				error: "User not found",
+			};
+		}
+
+		const isPasswordValid = await bcrypt.compare(password, user.password);
+
+		if (!isPasswordValid) {
+			return {
+				error: "Invalid password",
+			};
+		}
+
+		// You might want to generate and return a JWT token here for authentication
+		// For this example, we'll just return the user object (excluding the password)
+		const { password: _, ...userWithoutPassword } = user.toObject();
+		return { user: userWithoutPassword };
 	} catch (error) {
-		console.log(error);
+		console.error("Login error:", error);
 		throw error;
 	}
 };

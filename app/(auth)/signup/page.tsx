@@ -1,8 +1,50 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { RegisterSchema } from "@/lib/validations";
+import { createAccount } from "@/lib/actions/user.action";
 
 const SignupForm = () => {
+	const router = useRouter();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<z.infer<typeof RegisterSchema>>({
+		resolver: zodResolver(RegisterSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+			confirmPassword: "",
+		},
+	});
+
+	async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+		setIsSubmitting(true);
+		try {
+			const res = await createAccount({
+				email: values.email,
+				password: values.password,
+				confirmPassword: values.confirmPassword,
+			});
+			if (res?.error) {
+				alert(`${res.error}`);
+			} else {
+				return router.push("/login");
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setIsSubmitting(false);
+		}
+	}
+
 	return (
 		<div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
 			<div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -25,17 +67,21 @@ const SignupForm = () => {
 					<p className="mt-2 text-left paragraph-medium text-gray-600">
 						Let&rsquo;s get you started sharing your links!
 					</p>
-					<form className="mt-8 space-y-6">
+					<form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
 						<div>
 							<label
 								htmlFor="email"
-								className="block text-sm font-medium text-gray-700">
+								className={`block text-sm font-medium ${
+									errors.email ? "text-accent-main" : "text-gray-700"
+								}`}>
 								Email address
 							</label>
 							<div className="mt-1 relative rounded-md shadow-sm">
 								<div className="absolute inset-y-0 left-0 pl-3 flex items-center gap-4 pointer-events-none">
 									<svg
-										className="h-5 w-5 text-gray-400"
+										className={`h-5 w-5 ${
+											errors.email ? "text-accent-main" : "text-gray-400"
+										}`}
 										viewBox="0 0 20 20"
 										fill="currentColor">
 										<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
@@ -44,26 +90,39 @@ const SignupForm = () => {
 								</div>
 								<input
 									id="email"
-									name="email"
 									type="email"
 									autoComplete="email"
 									required
-									className="focus:ring-primary-main outline-none border block w-full sm:text-sm border-gray-400 rounded-md input-padding focus:outline-none focus:border-primary-main"
-									placeholder="e.g. alex@email.com"
+									className={`focus:ring-primary-main outline-none border block w-full sm:text-sm border-gray-400 rounded-md input-padding focus:outline-none focus:border-primary-main ${
+										errors.email ? "border-accent-main" : "border-gray-400"
+									}`}
+									placeholder={`${
+										errors.email ? errors.email.message : "e.g. alex@email.com"
+									}`}
+									{...register("email")}
 								/>
 							</div>
+							{errors.email && (
+								<p className="text-red-500 text-sm mt-2">
+									{errors.email.message}
+								</p>
+							)}
 						</div>
 
 						<div>
 							<label
 								htmlFor="password"
-								className="block text-sm font-medium text-gray-700">
+								className={`block text-sm font-medium ${
+									errors.password ? "text-accent-main" : "text-gray-700"
+								}`}>
 								Create password
 							</label>
 							<div className="mt-1 relative rounded-md shadow-sm">
-								<div className="absolute inset-y-0 left-0 px-3 flex items-center gap-4 pointer-events-none">
+								<div className="absolute inset-y-0 left-0 pl-3 flex items-center gap-4 pointer-events-none">
 									<svg
-										className="h-5 w-5 text-gray-400"
+										className={`h-5 w-5 ${
+											errors.password ? "text-accent-main" : "text-gray-400"
+										}`}
 										viewBox="0 0 20 20"
 										fill="currentColor">
 										<path
@@ -75,26 +134,43 @@ const SignupForm = () => {
 								</div>
 								<input
 									id="password"
-									name="password"
 									type="password"
 									autoComplete="current-password"
 									required
-									className="focus:ring-primary-main outline-none border block w-full sm:text-sm border-gray-400 rounded-md input-padding focus:outline-none focus:border-primary-main"
-									placeholder="Enter your password"
+									className={`focus:ring-primary-main outline-none border block w-full sm:text-sm border-gray-400 rounded-md input-padding focus:outline-none focus:border-primary-main ${
+										errors.password ? "border-red-500" : "border-gray-400"
+									}`}
+									placeholder={`${
+										errors.password
+											? errors.password.message
+											: "Enter your password"
+									}`}
+									{...register("password")}
 								/>
 							</div>
+							{errors.password && (
+								<p className="text-red-500 text-sm mt-2">
+									{errors.password.message}
+								</p>
+							)}
 						</div>
 
 						<div>
 							<label
-								htmlFor="password"
-								className="block text-sm font-medium text-gray-700">
-								Confirm password
+								htmlFor="confirmPassword"
+								className={`block text-sm font-medium ${
+									errors.password ? "text-accent-main" : "text-gray-700"
+								}`}>
+								Confirm Password
 							</label>
 							<div className="mt-1 relative rounded-md shadow-sm">
-								<div className="absolute inset-y-0 left-0 px-3 flex items-center gap-4 pointer-events-none">
+								<div className="absolute inset-y-0 left-0 pl-3 flex items-center gap-4 pointer-events-none">
 									<svg
-										className="h-5 w-5 text-gray-400"
+										className={`h-5 w-5 ${
+											errors.confirmPassword
+												? "text-accent-main"
+												: "text-gray-400"
+										}`}
 										viewBox="0 0 20 20"
 										fill="currentColor">
 										<path
@@ -105,18 +181,28 @@ const SignupForm = () => {
 									</svg>
 								</div>
 								<input
-									id="confirm-password"
-									name="confirm-password"
+									id="confirmPassword"
 									type="password"
 									autoComplete="current-password"
 									required
-									className="focus:ring-primary-main outline-none border block w-full sm:text-sm border-gray-400 rounded-md input-padding focus:outline-none focus:border-primary-main"
-									placeholder="Enter your password"
+									className={`focus:ring-primary-main outline-none border block w-full sm:text-sm border-gray-400 rounded-md input-padding focus:outline-none focus:border-primary-main ${
+										errors.confirmPassword
+											? "border-red-500"
+											: "border-gray-400"
+									}`}
+									placeholder={`${
+										errors.confirmPassword
+											? errors.confirmPassword.message
+											: "Enter your password"
+									}`}
+									{...register("confirmPassword")}
 								/>
 							</div>
-							<p className="paragraph-small py-4">
-								Password must contain at least 8 characters
-							</p>
+							{errors.confirmPassword && (
+								<p className="text-red-500 text-sm mt-2">
+									{errors.confirmPassword.message}
+								</p>
+							)}
 						</div>
 
 						<div>

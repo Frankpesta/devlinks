@@ -72,7 +72,7 @@ const Page = () => {
 					<div className="text-center space-y-5 w-full lg:w-3/4">
 						<h2 className="h1-bold">Let&rsquo;s get you started</h2>
 						<p className="paragraph-medium text-gray-400 sm:text-justify">
-							Use the "Add new link" button to get started. Once you have more
+							Use the &quot;Add new link&quot; button to get started. Once you have more
 							than one link, you can reorder and edit them. We are here to help
 							you share your profiles with everyone!
 						</p>
